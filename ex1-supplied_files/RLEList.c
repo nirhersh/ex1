@@ -1,14 +1,12 @@
-#include "RLEList.h"
-#include "assert.h"
-#include "stdlib.h"
-#include "stdio.h"
+#include "RLEList.h"  
 
 //this function gets a pointer to a RLElist and returns the num of Nodes in the RLElist;
-int RLECountNodes(RLEList list);
+int exportStringSize(RLEList list);
+int numOfDigits(int num);
 struct RLEList_t{
-    char Data;
-    int Repetitions;
-    struct RLElist_t* next;
+    char data;
+    int repetitions;
+    RLEList next;
 };
 
 //implement the functions here
@@ -22,8 +20,8 @@ RLEList RLEListCreate()
         return NULL;
     }
     assert(list);
-    list->Data = '\0';
-    list->Repetitions = 0;
+    list->data = '\0';
+    list->repetitions = 0;
     list->next = NULL;
     return list;
 }
@@ -33,9 +31,9 @@ void RLEListDestroy(RLEList list)
 {
     while (list)
     {
-        RLEList ToDelete = list;
+        RLEList toDelete = list;
         list = list->next;
-        free(ToDelete);
+        free(toDelete);
     } 
 }
 
@@ -51,32 +49,31 @@ void RLEListDestroy(RLEList list)
 */
 RLEListResult RLEListAppend(RLEList list, char value)
 {
-    if (value == NULL || list == NULL){
+    if (list == NULL){
         return RLE_LIST_NULL_ARGUMENT;
     }
-    RLEList Temp = list;
-    while (Temp->next != NULL)
+    RLEList temp = list;
+    while (temp->next != NULL)
     {
-        Temp = Temp->next;
+        temp = temp->next;
     }
-    if(Temp->Repetitions == 0){
-        Temp->Data
- = value;
-        Temp->Repetitions++;
+    if(temp->repetitions == 0){
+        temp->data= value;
+        temp->repetitions++;
         return RLE_LIST_SUCCESS;
     }
-    if(Temp->Data == value){
-        Temp->Repetitions++;
+    if(temp->data == value){
+        temp->repetitions++;
         return RLE_LIST_SUCCESS;
     }
-    Temp->next = malloc(sizeof(*Temp));
-    assert(Temp->next != NULL);
-    if(Temp->next == NULL){
+    temp->next = malloc(sizeof(*temp));
+    assert(temp->next != NULL);
+    if(temp->next == NULL){
         return RLE_LIST_OUT_OF_MEMORY;
     }
-    Temp = Temp->next;
-    Temp->Data = value;
-    Temp->Repetitions++;
+    temp = temp->next;
+    temp->data = value;
+    temp->repetitions++;
     return RLE_LIST_SUCCESS;
 
 }
@@ -90,17 +87,17 @@ RLEListResult RLEListAppend(RLEList list, char value)
 */
 int RLEListSize(RLEList list)
 {
-    int Counter = 0;
+    int counter = 0;
     if(list == NULL){
         return -1;
     }
-    RLEList Temp = list;
-    while (Temp)
+    RLEList temp = list;
+    while (temp)
     {
-        Counter += Temp->Repetitions;
-        Temp = Temp->next;
+        counter += temp->repetitions;
+        temp = temp->next;
     }
-    return Counter;
+    return counter;
 }
 
 /**
@@ -115,30 +112,30 @@ int RLEListSize(RLEList list)
 */
 RLEListResult RLEListRemove(RLEList list, int index) ///////////////////assumed 0 is the index of the first node
 {
-    if(list == NULL || index == NULL)
+    if(list == NULL)
     return RLE_LIST_NULL_ARGUMENT;
-    RLEList Temp = list;
-    RLEList Previous = list;
-    if(index > RLEListSize(Temp));{
+    RLEList temp = list;
+    RLEList previous = list;
+    if(index > RLEListSize(temp));{
         return RLE_LIST_INDEX_OUT_OF_BOUNDS;
     }
-    int Counter = 0;
-    while(Counter + Temp->Repetitions < index)
+    int counter = 0;
+    while(counter + temp->repetitions < index)
     {
-        Counter += Temp->Repetitions;
-        Previous = Temp;
-        Temp = Temp->next;
-        assert(Temp != NULL);
+        counter += temp->repetitions;
+        previous = temp;
+        temp = temp->next;
+        assert(temp != NULL);
     }
     // now we are sure that temp points on the node with the char to be removed
-    if(Temp->Repetitions > 1){
-        Temp->Repetitions --;
+    if(temp->repetitions > 1){
+        temp->repetitions --;
         return RLE_LIST_SUCCESS;
     }
     // in case we need to delete temp: (prev points on the node before temp and 
     //    prev.next will be reset as the one after temp)
-    Previous->next = Temp->next;
-    free(Temp);
+    previous->next = temp->next;
+    free(temp);
     return RLE_LIST_SUCCESS;
 
 
@@ -159,31 +156,31 @@ RLEListResult RLEListRemove(RLEList list, int index) ///////////////////assumed 
 */
 char RLEListGet(RLEList list, int index, RLEListResult *result)
 {
-    RLEList Temp = list;
-    if(Temp == NULL){
+    RLEList temp = list;
+    if(temp == NULL){
         if(result != NULL){
         *result = RLE_LIST_NULL_ARGUMENT;
         }
         return 0;
     }
-    if(index > RLEListSize(Temp));{
+    if(index > RLEListSize(temp));{
         if(result != NULL){
         *result = RLE_LIST_INDEX_OUT_OF_BOUNDS;
         return 0;
         }
     }
-    int Counter = 0;
-    while(Counter + Temp->Repetitions < index)
+    int counter = 0;
+    while(counter + temp->repetitions < index)
     {
-        Counter += Temp->Repetitions;
-        Temp = Temp->next;
-        assert(Temp != NULL);
+        counter += temp->repetitions;
+        temp = temp->next;
+        assert(temp != NULL);
     }
     
     if(result != NULL){
         *result = RLE_LIST_SUCCESS;
         }
-    return Temp->Data;
+    return temp->data;
 
 }
 
@@ -206,38 +203,59 @@ char* RLEListExportToString(RLEList list, RLEListResult* result) //////////shoul
         }
         return NULL;
     }
-    RLEList Temp = list; 
-    int Size = RLECountNodes(Temp);
-    char* String = (char*)malloc(Size*sizeof(char)*3); //nultiply by 3 to make place for the char, the repetitions and the \n
-    assert(String != NULL);
-    if(String == NULL)
+    RLEList temp = list; 
+    int size = exportStringSize(temp); //length of the string
+    char* string = (char*)malloc(size*sizeof(char)); //nultiply by 3 to make place for the char, the repetitions and the \n
+    assert(string != NULL);
+    if(string == NULL)
     {
-        *result = RLE_LIST_OUT_OF_MEMORY;
+        *result = RLE_LIST_ERROR;
         return NULL;
     }
-    char* StringPtr = String;
-    while (Temp != NULL)
+    char* stringPtr = string;
+    while (temp != NULL)
     {
-        StringPtr[0] = Temp->Data;
-        StringPtr[1] = (char)Temp->Repetitions;
-        StringPtr[2] = '\n';
-        Temp = Temp->next;
-        StringPtr += 3;
+        (*string) = list->data;
+        int offset = 0;
+        // return null in case of failure
+        if((offset = sprintf(++string, "%d", list->repetitions)) < 0){
+            *result = RLE_LIST_ERROR;
+            return NULL;
+        }
+        string += offset;
+        (*string) = '\n';
+        temp = temp->next;
     }
-
+    (*string) = '\0';
+    return stringPtr;
 }
 
-int RLECountNodes(RLEList list)
+int exportStringSize(RLEList list)
 {
-    int Counter = 0;
-    RLEList Temp = list;
-    while (Temp != NULL)
+    int counter = 0;
+    RLEList temp = list;
+    while (temp != NULL)
     {
-        Counter++;
-        Temp = Temp->next;
+        int length = numOfDigits(temp->repetitions);
+        counter+=length;
+        counter++; //for the \n or \0
+        temp = temp->next;
     }
-    return Counter;
+    return counter;
 }
+
+int numOfDigits(int num)
+{
+    int count = 0;
+    while(num > 0)
+    {
+        count ++;
+        num = num / 10;
+    }
+    return count;
+}
+
+
 
 /**
 *   RLEListMap: Change the given RLE list's characters according to the received mapping function.
@@ -256,13 +274,13 @@ RLEListResult RLEListMap(RLEList list, MapFunction map_function)
         return RLE_LIST_NULL_ARGUMENT;
     }
     assert(list != NULL && map_function != NULL);
-    RLEList Temp = list;
+    RLEList temp = list;
     char replace;
-    while(Temp != NULL)
+    while(temp != NULL)
     {
-        replace = map_function(Temp->Data); /////////////////////is this the way i should use function pointer?
-        Temp->Data = replace;
-        Temp = Temp->next;
+        replace = map_function(temp->data); /////////////////////is this the way i should use function pointer?
+        temp->data = replace;
+        temp = temp->next;
     }
     return RLE_LIST_SUCCESS;
 }

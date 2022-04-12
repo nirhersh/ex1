@@ -1,15 +1,15 @@
 #include "AsciiArt.h"
 
-RLEList asciiArtRead(FILE* in_stream){
-    assert(in_stream);
-    if (in_stream == NULL){
+RLEList asciiArtRead(FILE* inStream){
+    assert(inStream);
+    if (inStream == NULL){
         return NULL;
     }
     RLEList list = RLEListCreate();
-    char current_charecter = 0;
-    while((current_charecter = (char)fgetc(in_stream))){
-        RLEListResult append_result = RLEListAppend(list, current_charecter);
-        if(append_result != RLE_LIST_SUCCESS){
+    char currentCharecter = 0;
+    while((currentCharecter = (char)fgetc(inStream))){
+        RLEListResult appendResult = RLEListAppend(list, currentCharecter);
+        if(appendResult != RLE_LIST_SUCCESS){
             RLEListDestroy(list);
             return NULL;
         }
@@ -18,39 +18,39 @@ RLEList asciiArtRead(FILE* in_stream){
 }
 
 
-RLEListResult asciiArtPrint(RLEList list, FILE* out_stream){
-    assert(out_stream);
+RLEListResult asciiArtPrint(RLEList list, FILE* outStream){
+    assert(outStream);
     assert(list);
-    if(list == NULL || out_stream == NULL){
+    if(list == NULL || outStream == NULL){
         return RLE_LIST_NULL_ARGUMENT;
     }
-    int list_size = RLEListSize(list);
-    RLEListResult rle_result;
-    for(int i=0; i<list_size; i++){
-        if(fputc(RLEListGet(list, i, &rle_result), out_stream) == EOF){
-            return rle_result;
+    int listSize = RLEListSize(list);
+    RLEListResult rleResult;
+    for(int i=0; i<listSize; i++){
+        if(fputc(RLEListGet(list, i, &rleResult), outStream) == EOF){
+            return rleResult;
         }
     }
     return RLE_LIST_SUCCESS; 
 }
 
-RLEListResult asciiArtPrintEncoded(RLEList list, FILE* out_stream){
-    assert(out_stream);
-    if(list == NULL || out_stream == NULL){
+RLEListResult asciiArtPrintEncoded(RLEList list, FILE* outStream){
+    assert(outStream);
+    if(list == NULL || outStream == NULL){
         return RLE_LIST_NULL_ARGUMENT;
     }
-    RLEListResult rle_result;
-    char* encoded_str = RLEListExportToString(list, &rle_result);
-    if(rle_result == RLE_LIST_SUCCESS){
-        if(fputs(encoded_str, out_stream) == EOF){
-            free(encoded_str);
+    RLEListResult rleResult;
+    char* encodedStr = RLEListExportToString(list, &rleResult);
+    if(rleResult == RLE_LIST_SUCCESS){
+        if(fputs(encodedStr, outStream) == EOF){
+            free(encodedStr);
             return RLE_LIST_ERROR;
         }else{
-            free(encoded_str);
+            free(encodedStr);
             return RLE_LIST_SUCCESS;
         }
     }else{
-        free(encoded_str);
-        return rle_result;
+        free(encodedStr);
+        return rleResult;
     }
 }
