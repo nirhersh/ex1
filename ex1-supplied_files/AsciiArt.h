@@ -4,9 +4,11 @@
 
 #ifndef HW1_ASCIIART_H
 #define HW1_ASCIIART_H
+#define NEWLINE '\n'
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <assert.h>
 #include "RLEList.h"
 
 /**
@@ -23,10 +25,12 @@
 
 /**
 *   asciiArtRead: reads a given file and compress it using RLE.
+*   Note that the user must free the returned list using RLEListDestroy() once it is no longer needed.
 *
 * @param in_stream - The input stream of the file containing the ascii picture.
 * @return
 * 	A new RLEList.
+*   In the case of a failure in reading the charecter from the file returns NULL.
 */
 RLEList asciiArtRead(FILE* in_stream);
 
