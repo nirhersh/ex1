@@ -74,6 +74,7 @@ RLEListResult RLEListAppend(RLEList list, char value)
     temp = temp->next;
     temp->data = value;
     temp->repetitions++;
+    //printf("appended %c it has %d repetitons\n", temp->data)
     return RLE_LIST_SUCCESS;
 
 }
@@ -112,15 +113,19 @@ int RLEListSize(RLEList list)
 */
 RLEListResult RLEListRemove(RLEList list, int index) ///////////////////assumed 0 is the index of the first node
 {
-    if(list == NULL)
-    return RLE_LIST_NULL_ARGUMENT;
+    assert(list);
+    if(list == NULL){
+        return RLE_LIST_NULL_ARGUMENT;
+    }
     RLEList temp = list;
     RLEList previous = list;
-    if(index > RLEListSize(temp));{
+    int temp_size =  RLEListSize(temp);
+    assert(index < temp_size);
+    if(index > RLEListSize(temp)){
         return RLE_LIST_INDEX_OUT_OF_BOUNDS;
     }
     int counter = 0;
-    while(counter + temp->repetitions < index)
+    while(counter + (temp->repetitions) <= index)
     {
         counter += temp->repetitions;
         previous = temp;
@@ -129,7 +134,7 @@ RLEListResult RLEListRemove(RLEList list, int index) ///////////////////assumed 
     }
     // now we are sure that temp points on the node with the char to be removed
     if(temp->repetitions > 1){
-        temp->repetitions --;
+        temp->repetitions--;
         return RLE_LIST_SUCCESS;
     }
     // in case we need to delete temp: (prev points on the node before temp and 
@@ -170,7 +175,7 @@ char RLEListGet(RLEList list, int index, RLEListResult *result)
         }
     }
     int counter = 0;
-    while(counter + temp->repetitions < index)
+    while(counter + temp->repetitions <= index)
     {
         counter += temp->repetitions;
         temp = temp->next;
