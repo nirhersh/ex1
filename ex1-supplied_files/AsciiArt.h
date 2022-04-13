@@ -4,7 +4,6 @@
 
 #ifndef HW1_ASCIIART_H
 #define HW1_ASCIIART_H
-#define NEWLINE '\n'
 
 #include <stdio.h>
 #include <stdbool.h>

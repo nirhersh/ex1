@@ -1,8 +1,6 @@
 #include "RLEList.h"  
 
-//this function gets a pointer to a RLElist and returns the num of Nodes in the RLElist;
-int exportStringSize(RLEList list);
-int numOfDigits(int num);
+
 struct RLEList_t{
     char data;
     int repetitions;
@@ -20,7 +18,7 @@ RLEList RLEListCreate()
         return NULL;
     }
     assert(list);
-    list->data = '\0';
+    list->data = NULL_CHAR;
     list->repetitions = 0;
     list->next = NULL;
     return list;
@@ -223,10 +221,10 @@ char* RLEListExportToString(RLEList list, RLEListResult* result) //////////shoul
             return NULL;
         }
         string += offset;
-        (*string) = '\n';
+        (*string) = NEWLINE;
         temp = temp->next;
     }
-    (*string) = '\0';
+    (*string) = NULL_CHAR;
     return stringPtr;
 }
 
