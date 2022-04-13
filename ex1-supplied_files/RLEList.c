@@ -116,6 +116,7 @@ int RLEListSize(RLEList list)
 */
 RLEListResult RLEListRemove(RLEList list, int index) ///////////////////assumed 0 is the index of the first node
 {
+    //printf("temp next next char is%c\n", list->next->next->data);
     assert(list);
     if(list == NULL){
         return RLE_LIST_NULL_ARGUMENT;
@@ -138,6 +139,15 @@ RLEListResult RLEListRemove(RLEList list, int index) ///////////////////assumed 
     // now we are sure that temp points on the node with the char to be removed
     if(temp->repetitions > 1){
         temp->repetitions--;
+        return RLE_LIST_SUCCESS;
+    }
+    if(index == 0){ //if case this is the first node and need to be removed:
+        
+        temp->data = temp->next->data;
+        temp->repetitions = temp->next->repetitions;
+        RLEList toDelete = temp->next;
+        temp->next = (temp->next)->next;
+        free(toDelete);
         return RLE_LIST_SUCCESS;
     }
     // in case we need to delete temp: (prev points on the node before temp and 
@@ -172,6 +182,7 @@ RLEListResult RLEListRemove(RLEList list, int index) ///////////////////assumed 
 */
 char RLEListGet(RLEList list, int index, RLEListResult *result)
 {
+    //printf("%c, ", list->data);
     RLEList temp = list;
     if(temp == NULL){
         if(result != NULL){
@@ -179,7 +190,7 @@ char RLEListGet(RLEList list, int index, RLEListResult *result)
         }
         return 0;
     }
-    if(index > RLEListSize(temp));{
+    if(index > RLEListSize(temp)){
         if(result != NULL){
         *result = RLE_LIST_INDEX_OUT_OF_BOUNDS;
         return 0;
