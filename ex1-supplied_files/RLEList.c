@@ -60,10 +60,12 @@ RLEListResult RLEListAppend(RLEList list, char value)
     if(temp->repetitions == 0){
         temp->data= value;
         temp->repetitions++;
+        //printf("appended %c it has %d repetitons\n", temp->data, temp->repetitions);
         return RLE_LIST_SUCCESS;
     }
     if(temp->data == value){
         temp->repetitions++;
+      //  printf("appended %c it has %d repetitons\n", temp->data, temp->repetitions);
         return RLE_LIST_SUCCESS;
     }
     temp->next = malloc(sizeof(*temp));
@@ -73,8 +75,9 @@ RLEListResult RLEListAppend(RLEList list, char value)
     }
     temp = temp->next;
     temp->data = value;
-    temp->repetitions++;
-    //printf("appended %c it has %d repetitons\n", temp->data)
+    temp->repetitions = 1;
+    temp->next = NULL;
+    //printf("appended %c it has %d repetitons\n", temp->data, temp->repetitions);
     return RLE_LIST_SUCCESS;
 
 }
