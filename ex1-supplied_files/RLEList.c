@@ -7,6 +7,8 @@ struct RLEList_t{
     RLEList next;
 };
 
+static int exportStringSize(RLEList list);
+static int numOfDigits(int num);
 //implement the functions here
 
 RLEList RLEListCreate()
@@ -228,7 +230,7 @@ char* RLEListExportToString(RLEList list, RLEListResult* result) //////////shoul
     return stringPtr;
 }
 
-int exportStringSize(RLEList list)
+static int exportStringSize(RLEList list)
 {
     int counter = 0;
     RLEList temp = list;
@@ -242,7 +244,7 @@ int exportStringSize(RLEList list)
     return counter;
 }
 
-int numOfDigits(int num)
+static int numOfDigits(int num)
 {
     int count = 0;
     while(num > 0)

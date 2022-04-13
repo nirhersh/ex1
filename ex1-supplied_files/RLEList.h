@@ -153,21 +153,4 @@ char* RLEListExportToString(RLEList list, RLEListResult* result);
 RLEListResult RLEListMap(RLEList list, MapFunction map_function);
 
 
-/**
-*   exportStringSize: Returns the size of the encoded string that represents the RLE list.
-* @param list - The RLE list to edit. 
-* @return
-* 	Int that is the size of the expected length
-*/
-int exportStringSize(RLEList list);
-
-
-/**
-*   numOfDigits: Returns the number of digits of an integer.
-* @param num - The integer to check.
-* @return
-* 	Int that is the number of digits in the number.
-*/
-int numOfDigits(int num);
-
 #endif // HW1_RLELIST_H
