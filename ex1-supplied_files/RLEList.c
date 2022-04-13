@@ -139,7 +139,15 @@ RLEListResult RLEListRemove(RLEList list, int index) ///////////////////assumed 
     }
     // in case we need to delete temp: (prev points on the node before temp and 
     //    prev.next will be reset as the one after temp)
-    previous->next = temp->next;
+    //check if the next node consist the same char and if it is, merges the nodes:
+    if((temp->next) && (previous->data == temp->next->data)){
+        previous->repetitions += temp->next->repetitions;
+        previous->next = temp->next->next;
+        free(temp->next); //after merge, free the second 
+    }
+    else{
+        previous->next = temp->next;
+    }
     free(temp);
     return RLE_LIST_SUCCESS;
 
