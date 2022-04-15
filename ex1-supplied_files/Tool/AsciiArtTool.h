@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <assert.h>
-#include "RLEList.h"
+#include "../RLEList.h"
 
 /**
  * Ascii Art Read and Write

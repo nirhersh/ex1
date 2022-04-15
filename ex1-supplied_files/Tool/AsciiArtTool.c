@@ -37,6 +37,7 @@ RLEListResult asciiArtPrint(RLEList list, FILE* outStream){
 RLEListResult asciiArtPrintEncoded(RLEList list, FILE* outStream){
     assert(outStream);
     if(list == NULL || outStream == NULL){
+        printf("Null arguement");
         return RLE_LIST_NULL_ARGUMENT;
     }
     RLEListResult rleResult;

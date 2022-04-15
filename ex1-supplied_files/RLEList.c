@@ -256,6 +256,7 @@ char* RLEListExportToString(RLEList list, RLEListResult* result) //////////shoul
         string++;
     }
     (*string) = NULL_CHAR;
+    *result = RLE_LIST_SUCCESS;
     return stringPtr;
 }
 
