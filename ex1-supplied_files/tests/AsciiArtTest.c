@@ -1,5 +1,5 @@
 #include "test_utilities.h"
-#include "../AsciiArt.h"
+#include "../AsciiArtTool.h"
 
 #include <stdio.h>
 #include <stdlib.h>

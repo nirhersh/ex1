@@ -1,4 +1,4 @@
-#include "AsciiArt.h"
+#include "AsciiArtTool.h"
 
 RLEList asciiArtRead(FILE* inStream){
     assert(inStream);
