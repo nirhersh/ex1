@@ -1,3 +1,9 @@
+# ignore exe files
 *.exe
+
+#ignore vscode environment files
 settings.json
 tempCodeRunnerFile.c
+
+#ignore tests outputs
+out.txt

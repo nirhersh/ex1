@@ -242,16 +242,18 @@ char* RLEListExportToString(RLEList list, RLEListResult* result) //////////shoul
     char* stringPtr = string;
     while (temp != NULL)
     {
-        (*string) = list->data;
+        (*string) = temp->data;
+        ++string;
         int offset = 0;
         // return null in case of failure
-        if((offset = sprintf(++string, "%d", list->repetitions)) < 0){
+        if((offset = sprintf(string, "%d", temp->repetitions)) < 0){
             *result = RLE_LIST_ERROR;
             return NULL;
         }
         string += offset;
         (*string) = NEWLINE;
         temp = temp->next;
+        string++;
     }
     (*string) = NULL_CHAR;
     return stringPtr;
@@ -264,7 +266,7 @@ static int exportStringSize(RLEList list)
     while (temp != NULL)
     {
         int length = numOfDigits(temp->repetitions);
-        counter+=length;
+        counter+=(length+1);
         counter++; //for the \n or \0
         temp = temp->next;
     }
