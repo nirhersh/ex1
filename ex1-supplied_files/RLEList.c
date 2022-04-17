@@ -123,9 +123,9 @@ RLEListResult RLEListRemove(RLEList list, int index) ///////////////////assumed 
     }
     RLEList temp = list;
     RLEList previous = list;
-    int temp_size =  RLEListSize(temp);
-    assert(index < temp_size);
-    if(index > RLEListSize(temp)){
+    int tempSize =  RLEListSize(temp);
+    assert(index < tempSize);
+    if(index > tempSize){
         return RLE_LIST_INDEX_OUT_OF_BOUNDS;
     }
     int counter = 0;
