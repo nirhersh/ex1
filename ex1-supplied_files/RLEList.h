@@ -5,13 +5,9 @@
 #ifndef HW1_RLELIST_H
 #define HW1_RLELIST_H
 
-#define NEWLINE '\n'
-#define NULL_CHAR '\0'
 
 #include <stdio.h>
 #include <stdbool.h>
-#include <assert.h>
-#include <stdlib.h>
 
 /**
 * Run Length Encoding List

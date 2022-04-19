@@ -1,5 +1,9 @@
 #include "RLEList.h"  
+#include <assert.h>
+#include <stdlib.h>
 
+#define NEWLINE '\n'
+#define NULL_CHAR '\0'
 
 struct RLEList_t{
     char data;

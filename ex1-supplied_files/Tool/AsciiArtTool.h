@@ -5,10 +5,11 @@
 #ifndef HW1_ASCIIART_H
 #define HW1_ASCIIART_H
 
+#include "RLEList.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include <assert.h>
-#include "../RLEList.h"
+#include <stdlib.h>
 
 /**
  * Ascii Art Read and Write
