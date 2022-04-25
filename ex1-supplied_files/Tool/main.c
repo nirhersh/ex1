@@ -16,6 +16,11 @@ int main(int argc, char** argv){
     }
 
     FILE* source = fopen(argv[2], "r");
+    if(!source)
+    {
+        printf("%s not found\n", argv[2]);
+        return 0;
+    }
     FILE* target = fopen(argv[3], "w");
     RLEList list = asciiArtRead(source);
     assert(list);
