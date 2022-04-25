@@ -121,15 +121,14 @@ int RLEListSize(RLEList list)
 RLEListResult RLEListRemove(RLEList list, int index) ///////////////////assumed 0 is the index of the first node
 {
     //printf("temp next next char is%c\n", list->next->next->data);
-    assert(list);
     if(list == NULL){
         return RLE_LIST_NULL_ARGUMENT;
     }
+    assert(list);
     RLEList temp = list;
     RLEList previous = list;
     int tempSize =  RLEListSize(temp);
-    assert(index < tempSize);
-    if(index > tempSize){
+    if(index + 1 > tempSize || index < 0){
         return RLE_LIST_INDEX_OUT_OF_BOUNDS;
     }
     int counter = 0;
@@ -139,6 +138,7 @@ RLEListResult RLEListRemove(RLEList list, int index) ///////////////////assumed 
         previous = temp;
         temp = temp->next;
         assert(temp != NULL);
+        assert(previous != NULL);
     }
     // now we are sure that temp points on the node with the char to be removed
     if(temp->repetitions > 1){
@@ -146,12 +146,16 @@ RLEListResult RLEListRemove(RLEList list, int index) ///////////////////assumed 
         return RLE_LIST_SUCCESS;
     }
     if(index == 0){ //if case this is the first node and need to be removed:
-        
-        temp->data = temp->next->data;
-        temp->repetitions = temp->next->repetitions;
-        RLEList toDelete = temp->next;
-        temp->next = (temp->next)->next;
-        free(toDelete);
+        if(temp->next == NULL){
+            temp->repetitions--;
+            temp->data = NULL_CHAR;
+        }else{
+            temp->data = temp->next->data;
+            temp->repetitions = temp->next->repetitions;
+            RLEList toDelete = temp->next;
+            temp->next = (temp->next)->next;
+            free(toDelete);
+        }
         return RLE_LIST_SUCCESS;
     }
     // in case we need to delete temp: (prev points on the node before temp and 
@@ -194,11 +198,11 @@ char RLEListGet(RLEList list, int index, RLEListResult *result)
         }
         return 0;
     }
-    if(index > RLEListSize(temp)){
+    if(index + 1 > RLEListSize(temp) || index < 0){
         if(result != NULL){
-        *result = RLE_LIST_INDEX_OUT_OF_BOUNDS;
-        return 0;
+            *result = RLE_LIST_INDEX_OUT_OF_BOUNDS;
         }
+        return 0;
     }
     int counter = 0;
     while(counter + temp->repetitions <= index)
