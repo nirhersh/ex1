@@ -240,7 +240,7 @@ char* RLEListExportToString(RLEList list, RLEListResult* result) //////////shoul
     }
     RLEList temp = list; 
     int size = exportStringSize(temp); //length of the string
-    char* string = (char*)malloc(size*sizeof(char)); //nultiply by 3 to make place for the char, the repetitions and the \n
+    char* string = (char*)malloc((size+1)*sizeof(char)); //nultiply by 3 to make place for the char, the repetitions and the \n
     assert(string != NULL);
     if(string == NULL)
     {
